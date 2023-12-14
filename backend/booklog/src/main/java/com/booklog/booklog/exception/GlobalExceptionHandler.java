@@ -26,6 +26,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(res, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(EmailException.class)
+    protected ResponseEntity<ErrorResponse> handleEmailException(EmailException e) {
+        log.warn("EmailException: ", e);
+        final ErrorResponse res = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    protected ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e) {
+        log.warn("BusinessException: ", e);
+        final ErrorResponse res = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+    }
+
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error("MethodArgumentNoValidException: ", ex);
@@ -35,14 +49,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({RestApiException.class})
     protected ResponseEntity<ErrorResponse> handleRestApiException(RestApiException e) {
-        log.error("handleRestApiException throw Exception : {}", e);
+        log.error("handleRestApiException throw Exception : ", e);
         final ErrorResponse res = ErrorResponse.of(e.getErrorCode());
         return new ResponseEntity<>(res, e.getErrorCode().getHttpStatus());
     }
 
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
-        log.error("handleException throw Exception : {}", e);
+        log.error("handleException throw Exception : ", e);
         final ErrorResponse res = ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(res, HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -51,7 +65,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleExceptionInternal(
             Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        log.error("Exception: {}", ex);
+        log.error("Exception: ", ex);
         final ResponseDto<String> res = ResponseDto.of(ex.getMessage(), ResponseEnum.FAIL);
         return super.handleExceptionInternal(ex, res, headers, status, request);
     }
