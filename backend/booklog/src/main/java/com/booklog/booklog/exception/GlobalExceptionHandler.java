@@ -54,6 +54,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(res, e.getErrorCode().getHttpStatus());
     }
 
+    @ExceptionHandler({NoSuchDataException.class})
+    protected ResponseEntity<ErrorResponse> handleNoSuchDataException(NoSuchDataException e) {
+        log.error("handleNoSuchDataException throw Exception : ", e);
+        final ErrorResponse res = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("handleException throw Exception : ", e);

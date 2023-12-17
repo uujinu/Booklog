@@ -6,7 +6,6 @@ import com.booklog.booklog.exception.EmailException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
@@ -22,12 +21,12 @@ public class EmailService {
 
     private final JavaMailSender emailSender;
     private final RedisUtil redisUtil;
-    public static String emailVerificationCode;// = createCode();;
+    public static String emailVerificationCode;
 
     @Value("${spring.mail.username}")
     private String from;
 
-    // 회원가입 이메일 인증
+    // 인증 이메일 본문
     private MimeMessage createMessage(String to) throws Exception {
         emailVerificationCode = createCode();
         MimeMessage message = emailSender.createMimeMessage();
@@ -52,13 +51,13 @@ public class EmailService {
         return message;
     }
 
-    public void sendCodeToEmail(String to) throws Exception {
-        MimeMessage message = createMessage(to);
-
+    public String sendCodeToEmail(String to) {
         try {
+            MimeMessage message = createMessage(to);
             redisUtil.setDataExpire(to, emailVerificationCode, 180);
             emailSender.send(message);
-        } catch (MailException e) {
+            return emailVerificationCode;
+        } catch (Exception e) {
             e.printStackTrace();
             throw new EmailException(ErrorCode.EMAIL_SEND_ERROR);
         }
