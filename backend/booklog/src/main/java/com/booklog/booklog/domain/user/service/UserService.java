@@ -1,17 +1,17 @@
 package com.booklog.booklog.domain.user.service;
 
 import com.booklog.booklog.common.util.Encryptor;
+import com.booklog.booklog.domain.user.dto.PWChangeReqDto;
 import com.booklog.booklog.domain.user.dto.UserSignUpReqDto;
 import com.booklog.booklog.domain.user.entity.User;
 import com.booklog.booklog.domain.user.repository.UserRepository;
 import com.booklog.booklog.exception.DuplicateException;
 import com.booklog.booklog.common.code.ErrorCode;
-import com.booklog.booklog.infra.email.EmailService;
+import com.booklog.booklog.exception.NoSuchDataException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,9 +47,20 @@ public class UserService {
         }
     }
 
-    @Transactional(readOnly = true)
-    public Optional<User> findUserByEmail(String email) { return userRepository.findByEmail(email); }
+    // 비밀번호 재설정
+    @Transactional
+    public void updatePassword(PWChangeReqDto dto) {
+        User user = findUserByEmail(dto.getEmail());
+        if (user == null) {
+            throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        user.setPassword(encryptor.encrypt(dto.getPassword()));
+    }
 
     @Transactional(readOnly = true)
-    public Optional<User> findUserByName(String name) { return userRepository.findByName(name); }
+    public User findUserByEmail(String email) { return userRepository.findByEmail(email).orElse(null); }
+
+    @Transactional(readOnly = true)
+    public User findUserByName(String name) { return userRepository.findByName(name).orElse(null); }
 }

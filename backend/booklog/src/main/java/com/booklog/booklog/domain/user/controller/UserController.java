@@ -2,9 +2,12 @@ package com.booklog.booklog.domain.user.controller;
 
 import com.booklog.booklog.common.code.ErrorCode;
 import com.booklog.booklog.common.response.ResponseDto;
+import com.booklog.booklog.domain.user.dto.PWChangeReqDto;
 import com.booklog.booklog.domain.user.dto.UserSignUpReqDto;
+import com.booklog.booklog.domain.user.entity.User;
 import com.booklog.booklog.domain.user.service.UserService;
 import com.booklog.booklog.exception.EmailException;
+import com.booklog.booklog.exception.NoSuchDataException;
 import com.booklog.booklog.infra.email.EmailCodeDto;
 import com.booklog.booklog.infra.email.EmailService;
 import lombok.AccessLevel;
@@ -62,5 +65,33 @@ public class UserController {
     public ResponseEntity<ResponseDto<Boolean>> checkNameDuplicate(@PathVariable String name) {
         userService.checkNameDuplication(name);
         return ResponseEntity.ok(ResponseDto.ofSuccess());
+    }
+
+    // 비밀번호 재설정 - 인증 이메일 전송
+    @GetMapping("/password")
+    public ResponseEntity<ResponseDto<String>> sendEmailToChangePW(@RequestParam("email") String email) {
+        User user = userService.findUserByEmail(email);
+        if (user == null) {
+            throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        emailService.sendCodeToEmail(email);
+        return ResponseEntity.ok(ResponseDto.of("인증 이메일을 확인해주세요."));
+    }
+
+    // 비밀번호 재설정 - 인증 코드 확인
+    @PostMapping("/password")
+    public ResponseEntity<ResponseDto<String>> checkEmailToChangePW(@Valid @RequestBody EmailCodeDto dto) {
+        if (!emailService.verifyEmailCode(dto)) {
+            throw new EmailException(ErrorCode.VERIFICATION_FAILED);
+        }
+        return ResponseEntity.ok(ResponseDto.of("이메일 인증이 완료되었습니다."));
+    }
+
+    // 비밀번호 재설정 - 비밀번호 변경
+    @PutMapping("/password")
+    public ResponseEntity<ResponseDto<String>> updatePassword(@Valid @RequestBody PWChangeReqDto dto) {
+        userService.updatePassword(dto);
+        return ResponseEntity.ok(ResponseDto.of("비밀번호가 변경되었습니다."));
     }
 }
