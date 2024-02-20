@@ -61,6 +61,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(res, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler({AuthorizationException.class})
+    protected ResponseEntity<ErrorResponse> handleAuthorizationException(AuthorizationException e) {
+        log.error("handleAuthorizationException throw Exception : ", e);
+        final ErrorResponse res = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler({Exception.class})
     protected ResponseEntity<ErrorResponse> handleException(Exception e) {
         log.error("handleException throw Exception : ", e);
