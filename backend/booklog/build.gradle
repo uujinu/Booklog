@@ -29,6 +29,7 @@ dependencies {
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.1'
     compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -42,7 +43,7 @@ dependencies {
 	// SMTP
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-	runtimeOnly 'com.h2database:h2' // 테스트 코드 작성시 사용할 DB(H2)
+	testRuntimeOnly 'com.h2database:h2' // 테스트 코드 작성시 사용할 DB(H2)
 }
 
 tasks.named('bootBuildImage') {
