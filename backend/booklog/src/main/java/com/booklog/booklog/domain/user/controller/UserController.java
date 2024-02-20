@@ -2,7 +2,9 @@ package com.booklog.booklog.domain.user.controller;
 
 import com.booklog.booklog.common.code.ErrorCode;
 import com.booklog.booklog.common.response.ResponseDto;
-import com.booklog.booklog.domain.user.dto.PWChangeReqDto;
+import com.booklog.booklog.domain.user.dto.EmailPWReqDto;
+import com.booklog.booklog.domain.user.dto.LoginReqDto;
+import com.booklog.booklog.auth.dto.TokenDto;
 import com.booklog.booklog.domain.user.dto.UserSignUpReqDto;
 import com.booklog.booklog.domain.user.entity.User;
 import com.booklog.booklog.domain.user.service.UserService;
@@ -53,6 +55,12 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.of("이메일 인증이 완료되었습니다."));
     }
 
+    // 로그인
+    @PostMapping("/signin")
+    public ResponseEntity<ResponseDto<TokenDto>> login(@Valid @RequestBody LoginReqDto dto) throws Exception {
+        return ResponseEntity.ok(ResponseDto.of(userService.signIn(dto)));
+    }
+
     // 이메일 중복 체크
     @GetMapping("/email/{email}")
     public ResponseEntity<ResponseDto<Boolean>> checkEmailDuplicate(@PathVariable String email) {
@@ -90,8 +98,15 @@ public class UserController {
 
     // 비밀번호 재설정 - 비밀번호 변경
     @PutMapping("/password")
-    public ResponseEntity<ResponseDto<String>> updatePassword(@Valid @RequestBody PWChangeReqDto dto) {
+    public ResponseEntity<ResponseDto<String>> updatePassword(@Valid @RequestBody EmailPWReqDto dto) {
         userService.updatePassword(dto);
         return ResponseEntity.ok(ResponseDto.of("비밀번호가 변경되었습니다."));
+    }
+
+    // 회원 탈퇴
+    @DeleteMapping("")
+    public ResponseEntity<ResponseDto<String>> deleteUser(@Valid @RequestBody EmailPWReqDto dto) {
+        userService.deleteUser(dto);
+        return ResponseEntity.ok(ResponseDto.of("회원 탈퇴가 완료되었습니다."));
     }
 }
