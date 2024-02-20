@@ -18,6 +18,9 @@ public enum ErrorCode {
     /* 401 UNAUTHORIZED : 인증되지 않은 사용자의 요청 */
     UNAUTHORIZED_REQUEST(HttpStatus.UNAUTHORIZED, "인증되지 않은 사용자입니다."),
     INVALID_CODE(HttpStatus.UNAUTHORIZED, "인증 코드가 일치하지 않습니다."),
+    LOGIN_FAILED(HttpStatus.UNAUTHORIZED, "로그인에 실패하였습니다."),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다"),
+    NOT_EXIST_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 존재하지 않습니다"),
 
     /* 403 FORBIDDEN : 권한이 없는 사용자의 요청 */
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "권한이 없습니다."),
