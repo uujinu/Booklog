@@ -1,16 +1,16 @@
 import styled from '@emotion/styled';
 import NavBar from './NavBar';
 
-const Header = () => {
+const Header = props => {
   return (
     <Container>
-      <NavBar />
+      <NavBar {...props} />
     </Container>
   );
 };
 
 const Container = styled.header`
-  position: relative;
+  position: fixed;
   top: 0;
   left: 0;
   z-index: 100;
