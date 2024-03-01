@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { HiOutlineMenuAlt3 } from 'react-icons/hi';
 import styled from '@emotion/styled';
 
-const NavBar = () => {
+const NavBar = ({ display = true, ...props }) => {
   const [toggleMenu, setToggleMenu] = useState(false);
   const handleNavBar = () => {
     setToggleMenu(!toggleMenu);
@@ -32,17 +32,18 @@ const NavBar = () => {
           />
         </TogglerBtn>
       </NavBarContent>
-
-      <NavBarCollapse toggleMenu={toggleMenu}>
-        <NavBarUl>
-          <NavItem>
-            <Link to="/">home</Link>
-          </NavItem>
-          <NavItem>
-            <Link to="login">login</Link>
-          </NavItem>
-        </NavBarUl>
-      </NavBarCollapse>
+      {display && (
+        <NavBarCollapse toggleMenu={toggleMenu}>
+          <NavBarUl>
+            <NavItem>
+              <Link to="/">home</Link>
+            </NavItem>
+            <NavItem>
+              <Link to="login">login</Link>
+            </NavItem>
+          </NavBarUl>
+        </NavBarCollapse>
+      )}
     </Container>
   );
 };
