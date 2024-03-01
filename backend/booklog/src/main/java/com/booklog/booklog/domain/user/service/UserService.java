@@ -114,5 +114,5 @@ public class UserService {
     public User findUserByName(String name) { return userRepository.findByName(name).orElse(null); }
 
     @Transactional(readOnly = true)
-    public User findUserById(String id) { return userRepository.findById(id).orElse(null); }
+    public User findUserById(Long id) { return userRepository.findById(id).orElse(null); }
 }
