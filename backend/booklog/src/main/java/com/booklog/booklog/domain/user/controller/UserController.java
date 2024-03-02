@@ -5,14 +5,17 @@ import com.booklog.booklog.common.response.ResponseDto;
 import com.booklog.booklog.domain.user.dto.EmailPWReqDto;
 import com.booklog.booklog.domain.user.dto.LoginReqDto;
 import com.booklog.booklog.auth.dto.TokenDto;
+import com.booklog.booklog.domain.user.dto.UserDto;
 import com.booklog.booklog.domain.user.dto.UserSignUpReqDto;
 import com.booklog.booklog.domain.user.entity.User;
 import com.booklog.booklog.domain.user.service.UserService;
 import com.booklog.booklog.exception.EmailException;
 import com.booklog.booklog.exception.NoSuchDataException;
+import com.booklog.booklog.exception.RestApiException;
 import com.booklog.booklog.infra.email.EmailCodeDto;
 import com.booklog.booklog.infra.email.EmailService;
 import lombok.AccessLevel;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -108,5 +111,14 @@ public class UserController {
     public ResponseEntity<ResponseDto<String>> deleteUser(@Valid @RequestBody EmailPWReqDto dto) {
         userService.deleteUser(dto);
         return ResponseEntity.ok(ResponseDto.of("회원 탈퇴가 완료되었습니다."));
+    }
+
+    // 회원 정보
+    @GetMapping(value = { "/info", "/info/{id}" })
+    public ResponseEntity<ResponseDto<UserDto>> getUserInfo(@PathVariable(required = false) String id) {
+        if (id == null) {
+            throw new RestApiException(ErrorCode.BAD_REQUEST);
+        }
+        return ResponseEntity.ok(ResponseDto.of(userService.getInfo(id)));
     }
 }
