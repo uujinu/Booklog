@@ -6,6 +6,7 @@ import com.booklog.booklog.auth.domain.JwtTokenProvider;
 import com.booklog.booklog.domain.user.dto.EmailPWReqDto;
 import com.booklog.booklog.domain.user.dto.LoginReqDto;
 import com.booklog.booklog.auth.dto.TokenDto;
+import com.booklog.booklog.domain.user.dto.UserDto;
 import com.booklog.booklog.domain.user.dto.UserSignUpReqDto;
 import com.booklog.booklog.domain.user.entity.User;
 import com.booklog.booklog.domain.user.repository.UserRepository;
@@ -105,6 +106,23 @@ public class UserService {
         }
 
         userRepository.delete(user);
+    }
+
+    // 회원 정보
+    public UserDto getInfo(String id) {
+        User user = findUserById(Long.valueOf(id));
+        if (user == null) {
+            throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        return UserDto.builder()
+                .id(id)
+                .name(user.getName())
+                .email(user.getEmail())
+                .profileImgUrl(user.getProfileImgUrl())
+                .birthday(user.getBirthday())
+                .introduction(user.getIntroduction())
+                .build();
     }
 
     @Transactional(readOnly = true)
