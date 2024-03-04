@@ -3,11 +3,8 @@ package com.booklog.booklog.domain.user.service;
 import com.booklog.booklog.auth.service.AuthService;
 import com.booklog.booklog.common.util.Encryptor;
 import com.booklog.booklog.auth.domain.JwtTokenProvider;
-import com.booklog.booklog.domain.user.dto.EmailPWReqDto;
-import com.booklog.booklog.domain.user.dto.LoginReqDto;
+import com.booklog.booklog.domain.user.dto.*;
 import com.booklog.booklog.auth.dto.TokenDto;
-import com.booklog.booklog.domain.user.dto.UserDto;
-import com.booklog.booklog.domain.user.dto.UserSignUpReqDto;
 import com.booklog.booklog.domain.user.entity.User;
 import com.booklog.booklog.domain.user.repository.UserRepository;
 import com.booklog.booklog.exception.AuthorizationException;
@@ -46,7 +43,7 @@ public class UserService {
 
     // 로그인
     @Transactional
-    public TokenDto signIn(LoginReqDto dto) {
+    public LoginResDto signIn(LoginReqDto dto) {
         User user = findUserByEmail(dto.getEmail());
         if (user == null) {
             throw new AuthorizationException(ErrorCode.LOGIN_FAILED);
@@ -65,11 +62,17 @@ public class UserService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
+        UserDto userDto = getUserInfo(user);
+
+        LoginResDto loginResDto = LoginResDto.builder()
+                .tokenDto(tokenDto)
+                .userDto(userDto)
+                .build();
 
         // refreshToken redis에 저장
         authService.saveRefreshToken(tokenDto);
 
-        return tokenDto;
+        return loginResDto;
     }
 
     // 닉네임 중복 여부 확인
@@ -115,8 +118,12 @@ public class UserService {
             throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
         }
 
+        return getUserInfo(user);
+    }
+
+    private UserDto getUserInfo(User user) {
         return UserDto.builder()
-                .id(id)
+                .id(String.valueOf(user.getId()))
                 .name(user.getName())
                 .email(user.getEmail())
                 .profileImgUrl(user.getProfileImgUrl())
