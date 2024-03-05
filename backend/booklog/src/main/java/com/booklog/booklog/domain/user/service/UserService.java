@@ -62,7 +62,7 @@ public class UserService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
-        UserDto userDto = getUserInfo(user);
+        UserDto userDto = getUserInfo(user, true);
 
         LoginResDto loginResDto = LoginResDto.builder()
                 .tokenDto(tokenDto)
@@ -112,24 +112,29 @@ public class UserService {
     }
 
     // 회원 정보
-    public UserDto getInfo(String id) {
+    public UserDto getInfo(String id, boolean isPrivate) {
         User user = findUserById(Long.valueOf(id));
         if (user == null) {
             throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
         }
 
-        return getUserInfo(user);
+        return getUserInfo(user, isPrivate);
     }
 
-    private UserDto getUserInfo(User user) {
-        return UserDto.builder()
+    private UserDto getUserInfo(User user, boolean isPrivate) {
+        UserDto dto = UserDto.builder()
                 .id(String.valueOf(user.getId()))
                 .name(user.getName())
-                .email(user.getEmail())
                 .profileImgUrl(user.getProfileImgUrl())
-                .birthday(user.getBirthday())
                 .introduction(user.getIntroduction())
                 .build();
+
+        // 본인 요청일 경우
+        if (isPrivate) {
+            dto.setEmail(user.getEmail());
+            dto.setBirthday(user.getBirthday());
+        }
+        return dto;
     }
 
     @Transactional(readOnly = true)
