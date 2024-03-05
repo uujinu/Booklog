@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -109,12 +110,21 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.of("회원 탈퇴가 완료되었습니다."));
     }
 
-    // 회원 정보
+    // 회원 정보(public)
     @GetMapping(value = { "/info", "/info/{id}" })
     public ResponseEntity<ResponseDto<UserDto>> getUserInfo(@PathVariable(required = false) String id) {
         if (id == null) {
             throw new RestApiException(ErrorCode.BAD_REQUEST);
         }
-        return ResponseEntity.ok(ResponseDto.of(userService.getInfo(id)));
+
+        return ResponseEntity.ok(ResponseDto.of(userService.getInfo(id, false)));
+    }
+
+    // 회원 정보(private)
+    @GetMapping("/info/my-info")
+    @Auth
+    public ResponseEntity<ResponseDto<UserDto>> getMyInfo(HttpServletRequest request) {
+        String id = (String) request.getAttribute("userId");
+        return ResponseEntity.ok(ResponseDto.of(userService.getInfo(id, true)));
     }
 }
