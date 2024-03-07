@@ -9,6 +9,10 @@ const NavBar = ({ display = true, ...props }) => {
     setToggleMenu(!toggleMenu);
   };
 
+  const [isLoggedIn, setLoggedIn] = useState(
+    localStorage.getItem('isLoggedIn')
+  );
+
   return (
     <Container>
       <NavBarContent>
@@ -38,9 +42,15 @@ const NavBar = ({ display = true, ...props }) => {
             <NavItem>
               <Link to="/">home</Link>
             </NavItem>
-            <NavItem>
-              <Link to="login">login</Link>
-            </NavItem>
+            {isLoggedIn === '1' ? (
+              <NavItem>
+                <Link to="Mypage">Mypage</Link>
+              </NavItem>
+            ) : (
+              <NavItem>
+                <Link to="login">login</Link>
+              </NavItem>
+            )}
           </NavBarUl>
         </NavBarCollapse>
       )}
