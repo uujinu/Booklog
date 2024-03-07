@@ -1,6 +1,5 @@
 package com.booklog.booklog.auth.controller;
 
-import com.booklog.booklog.auth.Auth;
 import com.booklog.booklog.auth.dto.ReissueTokenDto;
 import com.booklog.booklog.auth.dto.TokenDto;
 import com.booklog.booklog.auth.service.AuthService;
@@ -17,7 +16,6 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/reissueToken")
-    @Auth
     public ResponseEntity<TokenDto> reissueToken(@RequestBody ReissueTokenDto dto) {
         return ResponseEntity.ok(authService.reissueAccessToken(dto));
     }
