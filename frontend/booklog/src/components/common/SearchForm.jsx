@@ -24,6 +24,7 @@ const SearchForm = () => {
 const SearchWrapper = styled.div`
   display: flex;
   width: 100%;
+  padding: 10px;
 `;
 
 const Btn = styled.button`

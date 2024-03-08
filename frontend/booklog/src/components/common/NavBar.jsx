@@ -27,14 +27,16 @@ const NavBar = ({ display = true, ...props }) => {
             <Title>booklog</Title>
           </Link>
         </Logo>
-        <TogglerBtn type="button" onClick={handleNavBar}>
-          <HiOutlineMenuAlt3
-            size={35}
-            style={{
-              color: `${toggleMenu ? '#f7a8a8' : '#d9176d'}`
-            }}
-          />
-        </TogglerBtn>
+        {display && (
+          <TogglerBtn type="button" onClick={handleNavBar}>
+            <HiOutlineMenuAlt3
+              size={35}
+              style={{
+                color: `${toggleMenu ? '#f7a8a8' : 'var(--white-color)'}`
+              }}
+            />
+          </TogglerBtn>
+        )}
       </NavBarContent>
       {display && (
         <NavBarCollapse toggleMenu={toggleMenu}>
@@ -44,7 +46,7 @@ const NavBar = ({ display = true, ...props }) => {
             </NavItem>
             {isLoggedIn === '1' ? (
               <NavItem>
-                <Link to="Mypage">Mypage</Link>
+                <Link to="my-page">Mypage</Link>
               </NavItem>
             ) : (
               <NavItem>
@@ -108,6 +110,8 @@ const NavBarCollapse = styled.div`
   right: 0;
   top: 0;
   z-index: 10;
+  background: ${props =>
+    props.toggleMenu ? 'linear-gradient(#ffd553, #6a24fe)' : 'none'};
   background-color: var(--white-color);
   height: 100%;
   width: 280px;

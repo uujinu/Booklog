@@ -2,8 +2,8 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/User/Login';
-import BookList from './components/book/BookList';
-import BookDetails from './components/book/BookDetails';
+import BookList from 'components/book/BookList';
+import BookDetails from 'components/book/BookDetails';
 import { MyPage } from './pages/User/MyPage';
 
 function App() {
