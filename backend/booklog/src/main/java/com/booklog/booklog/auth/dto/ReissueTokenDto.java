@@ -1,13 +1,11 @@
 package com.booklog.booklog.auth.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Getter
+@NoArgsConstructor
 public class ReissueTokenDto {
 
-    @JsonProperty("refreshToken")
     private String refreshToken;
 }

@@ -34,7 +34,7 @@ public class AuthService {
         String userId = jwtTokenProvider.getUserId(refreshToken);
 
         // redis에서 refreshToken 가져오기
-        String token = getRefreshToken(dto.getRefreshToken());
+        String token = getRefreshToken(userId);
         if (!token.equals(refreshToken)) {
             throw new AuthorizationException(ErrorCode.NOT_EXIST_TOKEN);
         }
@@ -69,11 +69,6 @@ public class AuthService {
     // redis에 refreshToken 저장
     public void saveRefreshToken(TokenDto dto) {
         String token = redisUtil.getData(dto.getUserId());
-
-        if (token != null) {
-            redisUtil.deleteData(dto.getUserId());
-        }
-
         redisUtil.setDataExpire(dto.getUserId(), dto.getRefreshToken(), refreshTokenValidTime);
     }
 }
