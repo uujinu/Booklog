@@ -41,6 +41,7 @@ public class AuthService {
 
         // 토큰 재발행
         TokenDto tokenDto = TokenDto.builder()
+                .userId(userId)
                 .accessToken(jwtTokenProvider.createAccessToken(userId))
                 .refreshToken(jwtTokenProvider.createRefreshToken(userId))
                 .build();
