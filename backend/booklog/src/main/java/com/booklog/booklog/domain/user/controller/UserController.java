@@ -105,6 +105,7 @@ public class UserController {
 
     // 회원 탈퇴
     @DeleteMapping("")
+    @Auth
     public ResponseEntity<ResponseDto<String>> deleteUser(@Valid @RequestBody EmailPWReqDto dto) {
         userService.deleteUser(dto);
         return ResponseEntity.ok(ResponseDto.of("회원 탈퇴가 완료되었습니다."));
