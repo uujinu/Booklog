@@ -31,51 +31,59 @@ const LoginForm = () => {
   );
 
   return (
-    <Form
-      onSubmit={handleSubmit(() => {
-        const loginData = {
-          email: email,
-          password: password
-        };
-        loginMutation.mutate(loginData);
-      })}
-    >
-      <Label htmlFor="Login">Login</Label>
-      <CustomInput
-        id="email"
-        type="email"
-        placeholder="Email"
-        {...register('email', {
-          required: '이메일을 입력해주세요.'
+    <FormWrapper>
+      <Form
+        onSubmit={handleSubmit(data => {
+          loginMutation.mutate(data);
         })}
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      {errors.email && <Msg role="alert">{errors.email.message}</Msg>}
-      <CustomInput
-        id="password"
-        type="password"
-        placeholder="Password"
-        {...register('password', {
-          required: '비밀번호를 입력해주세요.'
-        })}
-        autocomplete={'off'}
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      {errors.password && <Msg role="alert">{errors.password.message}</Msg>}
-      <CustomButton
-        type="submit"
-        disabled={isSubmitting}
-        color={`var(--purple-color)`}
-        text={'로그인'}
-      />
-      <LinkToSignUp>
-        <Link to="signup">아직 회원이 아니세요?</Link>
-      </LinkToSignUp>
-    </Form>
+      >
+        <Label htmlFor="Login">Login</Label>
+        <CustomInput
+          id="email"
+          type="email"
+          placeholder="Email"
+          {...register('email', {
+            required: '이메일을 입력해주세요.'
+          })}
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        {errors.email && <Msg role="alert">{errors.email.message}</Msg>}
+        <CustomInput
+          id="password"
+          type="password"
+          placeholder="Password"
+          {...register('password', {
+            required: password === '' ? '비밀번호를 입력해주세요.' : ''
+          })}
+          autocomplete={'off'}
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        {errors.password && <Msg role="alert">{errors.password.message}</Msg>}
+        <CustomButton
+          type="submit"
+          disabled={isSubmitting}
+          color={`var(--purple-color)`}
+          text={'로그인'}
+        />
+        <LinkWrapper>
+          <OtherLink ta={`left`}>
+            <Link to="/password-reset">비밀번호 재설정</Link>
+          </OtherLink>
+          <OtherLink ta={`right`}>
+            <Link to="/signup">아직 회원이 아니세요?</Link>
+          </OtherLink>
+        </LinkWrapper>
+      </Form>
+    </FormWrapper>
   );
 };
+
+const FormWrapper = styled.div`
+  max-width: 400px;
+  width: 100%;
+`;
 
 const Form = styled.form`
   height: 100%;
@@ -108,10 +116,17 @@ const Msg = styled.p`
   bottom: 12px;
 `;
 
-const LinkToSignUp = styled.div`
+const LinkWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
+`;
+
+const OtherLink = styled.div`
   font-size: 15px;
   width: 100%;
-  text-align: right;
+  text-align: ${props => props.ta};
 
   & > a:hover {
     text-decoration: underline;

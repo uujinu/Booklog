@@ -2,10 +2,7 @@ import styled from '@emotion/styled';
 import { forwardRef } from 'react';
 
 const Input = styled.input`
-  @media (max-width: 992px) {
-    width: 100%;
-  }
-  width: 250px;
+  width: 100%;
   padding: 15px;
   margin-bottom: 15px;
   font-size: 16px;

@@ -1,20 +1,26 @@
 import styled from '@emotion/styled';
 
+const CustomButton = ({ color, text, ...props }) => {
+  return (
+    <Button color={color} {...props}>
+      {text}
+    </Button>
+  );
+};
+
 const Button = styled.button`
   border-radius: 10px;
   background-color: ${props =>
-    props.color ? props.color : 'var(--purple-color)'};
+    props.disabled === 'disabled'
+      ? 'var(--light-black-color)'
+      : props.color
+        ? props.color
+        : 'var(--purple-color)'};
   width: 100%;
   padding: 15px;
   font-size: 15px;
   color: var(--white-color);
-  &:hover {
-    background-color: 'pink';
-  }
+  cursor: ${props => (props.disabled === 'disabled' ? 'default' : 'pointer')};
 `;
-
-const CustomButton = ({ color, text }) => {
-  return <Button color={color}>{text}</Button>;
-};
 
 export default CustomButton;
