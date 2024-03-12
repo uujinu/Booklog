@@ -12,11 +12,12 @@ module.exports = {
   },
   extends: ['react-app', 'eslint:recommended', 'plugin:prettier/recommended'],
   rules: {
-    'max-depth': ['error', 2],
+    'max-depth': ['error', 3],
     'max-lines-per-function': 'off',
     'operator-linebreak': ['error', 'before'],
     'no-unused-expressions': ['error', { allowTernary: true }],
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
-    'no-unused-vars': 'off'
+    'no-unused-vars': 'off',
+    'no-useless-escape': 'off'
   }
 };
