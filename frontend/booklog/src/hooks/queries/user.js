@@ -24,3 +24,11 @@ export const useUserLoginMutation = (successAction, errorAction) => {
     }
   });
 };
+
+// 회원 정보 요청
+export const useGetUserInfoQuery = ({ isLoggedIn, id = null }) => {
+  return useQuery(
+    'USER_INFO',
+    isLoggedIn === '1' ? getMyInfo : getUserInfo(id)
+  );
+};
