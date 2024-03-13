@@ -19,3 +19,27 @@ export const getUserInfo = id => {
 export const deleteUser = id => {
   return privateApi.get(`/users/${id}`);
 };
+
+export const checkEmail = email => {
+  return publicApi.get(`/users/email/${email}`);
+};
+
+export const checkName = name => {
+  return publicApi.get(`/users/name/${name}`);
+};
+
+export const emailVerification = email => {
+  return publicApi.get(`/users/signup/email?email=${email}`);
+};
+
+export const getPWResetEmail = email => {
+  return publicApi.get(`/users/password?email=${email}`);
+};
+
+export const checkCode = data => {
+  return publicApi.post('/users/password', data);
+};
+
+export const resetPassword = data => {
+  return publicApi.put('/users/password', data);
+};
