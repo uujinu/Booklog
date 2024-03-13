@@ -28,8 +28,12 @@ export const checkName = name => {
   return publicApi.get(`/users/name/${name}`);
 };
 
-export const emailVerification = email => {
+export const getCode = email => {
   return publicApi.get(`/users/signup/email?email=${email}`);
+};
+
+export const emailVerification = data => {
+  return publicApi.post('/users/signup/email-verification', data);
 };
 
 export const getPWResetEmail = email => {
