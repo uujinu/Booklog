@@ -39,9 +39,6 @@ public class UserController {
     // 회원가입 이메일 인증 요청
     @GetMapping("/signup/email")
     public ResponseEntity<ResponseDto<String>> sendEmail(@RequestParam("email") String email) throws Exception {
-        // 이메일 중복 체크
-        userService.checkEmailDuplication(email);
-
         emailService.sendCodeToEmail(email);
         return ResponseEntity.ok(ResponseDto.of("인증 이메일을 확인해주세요."));
     }
