@@ -18,7 +18,7 @@ import java.time.LocalDate;
 public class UserSignUpReqDto {
 
     @NotBlank(message = "이메일을 입력해주세요.")
-    @Pattern(regexp = "^(?:\\w+\\.?)*\\w+@(?:\\w+\\.)+\\w+$", message = "이메일 형식이 올바르지 않습니다.")
+    @Pattern(regexp = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$", message = "이메일 형식이 올바르지 않습니다.")
     private String email;
 
     @NotBlank(message = "닉네임을 입력해주세요.")
