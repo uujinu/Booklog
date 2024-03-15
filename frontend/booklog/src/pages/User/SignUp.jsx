@@ -16,7 +16,6 @@ export const SignUp = () => {
 const Container = styled.section`
   @media (min-width: 992px) {
     width: 600px;
-    padding: 0 20px;
   }
   width: 100%;
   height: 100vh;
@@ -25,4 +24,8 @@ const Container = styled.section`
   justify-content: center;
   align-items: center;
   padding: 0 100px;
+
+  @media (max-width: 992px) {
+    padding: 0 20px;
+  }
 `;

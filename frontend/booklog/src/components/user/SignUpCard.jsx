@@ -1,8 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from '@emotion/styled';
-import { redirect } from 'react-router-dom';
 import { AuthForm } from './AuthForm';
-import { useUserSignUpMutation } from 'hooks/queries/user';
 import { ProfileForm } from './ProfileForm';
 
 export const SignUpCard = () => {
@@ -16,24 +14,12 @@ export const SignUpCard = () => {
   const [step, setStep] = useState(0);
   const [values, setValues] = useState(initialValues);
 
-  useEffect(() => {
-    console.log('values: ' + JSON.stringify(values));
-  }, [values]);
-
-  const signUpMutation = useUserSignUpMutation(
-    res => {
-      alert('회원가입이 완료되었습니다.');
-    },
-    () => {
-      alert('회원가입에 실패했습니다.');
-    }
-  );
-
   return (
     <FormWrapper>
       <Label htmlFor="SignUp">SignUp</Label>
       {(() => {
         switch (step) {
+          default:
           case 0:
             return (
               <AuthForm
@@ -43,15 +29,7 @@ export const SignUpCard = () => {
               />
             );
           case 1:
-            return (
-              <ProfileForm
-                value={values}
-                setValues={setValues}
-                setStep={setStep}
-              />
-            );
-          default:
-            return redirect('/');
+            return <ProfileForm value={values} setValues={setValues} />;
         }
       })()}
     </FormWrapper>
