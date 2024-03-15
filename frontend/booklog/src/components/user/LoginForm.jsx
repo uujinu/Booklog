@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,13 +10,20 @@ import { loginUser } from 'store/user';
 const LoginForm = () => {
   const {
     register,
-    handleSubmit,
-    formState: { isSubmitting, errors }
+    watch,
+    setValue,
+    formState: { isSubmitting, errors },
+    handleSubmit
   } = useForm();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const email = watch('email');
+  const password = watch('password');
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setValue('email', email);
+    setValue('password', password);
+  }, [email, password, setValue]);
 
   const loginMutation = useUserLoginMutation(
     res => {
@@ -24,8 +31,8 @@ const LoginForm = () => {
       navigate('/');
     },
     () => {
-      setEmail('');
-      setPassword('');
+      setValue('email', '');
+      setValue('password', '');
       alert('아이디 또는 비밀번호가 일치하지 않습니다.');
     }
   );
@@ -45,8 +52,6 @@ const LoginForm = () => {
           {...register('email', {
             required: '이메일을 입력해주세요.'
           })}
-          value={email}
-          onChange={e => setEmail(e.target.value)}
         />
         {errors.email && <Msg role="alert">{errors.email.message}</Msg>}
         <CustomInput
@@ -57,8 +62,6 @@ const LoginForm = () => {
             required: password === '' ? '비밀번호를 입력해주세요.' : ''
           })}
           autocomplete={'off'}
-          value={password}
-          onChange={e => setPassword(e.target.value)}
         />
         {errors.password && <Msg role="alert">{errors.password.message}</Msg>}
         <CustomButton
