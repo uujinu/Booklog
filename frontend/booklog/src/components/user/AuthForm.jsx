@@ -36,7 +36,7 @@ export const AuthForm = ({ value, setValues, setStep }) => {
   const [emailCodeError, setEmailCodeError] = useState(false);
   const [emailCodeErrorMsg, setEmailCodeErrorMsg] = useState('');
   const [pwCheckInputDisabled, setPWCheckInputDisabled] = useState(true);
-  const [minutes, setMinutes] = useState(1);
+  const [minutes, setMinutes] = useState(2);
   const [seconds, setSeconds] = useState(0);
   const [intervalTime, setIntervalTime] = useState(0);
   const [emailCheckCompleted, setEmailCheckCompleted] = useState(false);
@@ -117,7 +117,7 @@ export const AuthForm = ({ value, setValues, setStep }) => {
   };
 
   const resetTimer = () => {
-    setMinutes(1);
+    setMinutes(2);
     setSeconds(0);
   };
 
