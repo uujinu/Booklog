@@ -84,20 +84,41 @@ public class UserController {
         return ResponseEntity.ok(ResponseDto.of("인증 이메일을 확인해주세요."));
     }
 
-    // 비밀번호 재설정 - 인증 코드 확인
+    // 비밀번호 재설정 - 인증 코드 확인 및 임시 비밀번호 발급
     @PostMapping("/password")
     public ResponseEntity<ResponseDto<String>> checkEmailToChangePW(@Valid @RequestBody EmailCodeDto dto) {
         if (!emailService.verifyEmailCode(dto)) {
             throw new EmailException(ErrorCode.VERIFICATION_FAILED);
         }
-        return ResponseEntity.ok(ResponseDto.of("이메일 인증이 완료되었습니다."));
+
+        String randomPassword = emailService.sendRandomPasswordToEmail(dto.getEmail());
+
+        // 임시 비밀번호로 변경
+        userService.updatePassword(dto.getEmail(), randomPassword);
+        return ResponseEntity.ok(ResponseDto.of("임시 비밀번호가 전송되었습니다."));
     }
 
     // 비밀번호 재설정 - 비밀번호 변경
-    @PutMapping("/password")
+    @PatchMapping("/password")
     public ResponseEntity<ResponseDto<String>> updatePassword(@Valid @RequestBody EmailPWReqDto dto) {
         userService.updatePassword(dto);
         return ResponseEntity.ok(ResponseDto.of("비밀번호가 변경되었습니다."));
+    }
+
+    // 닉네임 변경
+    @PatchMapping("/name")
+    @Auth
+    public ResponseEntity<ResponseDto<UserDto>> updateName(@Valid @RequestBody NameUpdateDto dto, HttpServletRequest request) {
+        String id = (String) request.getAttribute("userId");
+        return ResponseEntity.ok(ResponseDto.of(userService.updateName(dto, id)));
+    }
+
+    // 소개글 변경
+    @PatchMapping("/introduction")
+    @Auth
+    public ResponseEntity<ResponseDto<UserDto>> updateIntro(@Valid @RequestBody IntroUpdateDto dto, HttpServletRequest request) {
+        String id = (String) request.getAttribute("userId");
+        return ResponseEntity.ok(ResponseDto.of(userService.updateIntroduction(dto, id)));
     }
 
     // 회원 탈퇴

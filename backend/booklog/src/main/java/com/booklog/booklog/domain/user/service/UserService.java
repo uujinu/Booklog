@@ -97,7 +97,46 @@ public class UserService {
             throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
         }
 
-        user.setPassword(encryptor.encrypt(dto.getPassword()));
+        if (!encryptor.isMatch(dto.getPassword(), user.getPassword())) {
+            throw new AuthorizationException(ErrorCode.UNAUTHORIZED_REQUEST);
+        }
+
+        user.setPassword(encryptor.encrypt(dto.getNewPassword()));
+    }
+
+    @Transactional
+    public void updatePassword(String email, String password) {
+        User user = findUserByEmail(email);
+        if (user == null) {
+            throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        user.setPassword(encryptor.encrypt(password));
+    }
+
+    // 닉네임 변경
+    @Transactional
+    public UserDto updateName(NameUpdateDto dto, String id) {
+        User user = findUserById(Long.valueOf(id));
+        if (user == null) {
+            throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        checkNameDuplication(dto.getName());
+        user.setName(dto.getName());
+        return getUserInfo(user, true);
+    }
+
+    // 소개글 변경
+    @Transactional
+    public UserDto updateIntroduction(IntroUpdateDto dto, String id) {
+        User user = findUserById(Long.valueOf(id));
+        if (user == null) {
+            throw new NoSuchDataException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        user.setIntroduction(dto.getIntroduction());
+        return getUserInfo(user, true);
     }
 
     // 회원 탈퇴
