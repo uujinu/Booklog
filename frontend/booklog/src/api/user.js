@@ -44,6 +44,14 @@ export const checkCode = data => {
   return publicApi.post('/users/password', data);
 };
 
-export const resetPassword = data => {
-  return publicApi.put('/users/password', data);
+export const updatePassword = data => {
+  return publicApi.patch('/users/password', data);
+};
+
+export const updateName = data => {
+  return privateApi.patch('/users/name', data);
+};
+
+export const updateIntro = data => {
+  return privateApi.patch('/users/introduction', data);
 };
