@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,6 +6,7 @@ import CustomButton from 'components/common/button';
 import CustomInput from 'components/common/input';
 import { useUserLoginMutation } from 'hooks/queries/user';
 import { loginUser } from 'store/user';
+import { PasswordResetModel } from './PasswordResetModal';
 
 const LoginForm = () => {
   const {
@@ -18,6 +19,7 @@ const LoginForm = () => {
 
   const email = watch('email');
   const password = watch('password');
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -72,13 +74,16 @@ const LoginForm = () => {
         />
         <LinkWrapper>
           <OtherLink ta={`left`}>
-            <Link to="/password-reset">비밀번호 재설정</Link>
+            <ResetPWBtn onClick={() => setModalOpen(true)}>
+              비밀번호 재설정
+            </ResetPWBtn>
           </OtherLink>
           <OtherLink ta={`right`}>
             <Link to="/signup">아직 회원이 아니세요?</Link>
           </OtherLink>
         </LinkWrapper>
       </Form>
+      {modalOpen && <PasswordResetModel setModalOpen={setModalOpen} />}
     </FormWrapper>
   );
 };
@@ -132,6 +137,13 @@ const OtherLink = styled.div`
   text-align: ${props => props.ta};
 
   & > a:hover {
+    text-decoration: underline;
+  }
+`;
+
+const ResetPWBtn = styled.button`
+  font-size: 15px;
+  &:hover {
     text-decoration: underline;
   }
 `;
