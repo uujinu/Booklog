@@ -64,7 +64,6 @@ privateApi.interceptors.response.use(
           return Promise.reject(e);
         });
     }
-    alert('요청에 실패했습니다.');
     return Promise.reject(error);
   }
 );
