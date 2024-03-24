@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useQuery, useMutation } from 'react-query';
 import { signUp, login, getMyInfo, getUserInfo } from 'api/user';
 
@@ -25,10 +26,26 @@ export const useUserLoginMutation = (successAction, errorAction) => {
   });
 };
 
-// 회원 정보 요청
-export const useGetUserInfoQuery = ({ isLoggedIn, id = null }) => {
-  return useQuery(
-    'USER_INFO',
-    isLoggedIn === '1' ? getMyInfo : getUserInfo(id)
-  );
+// 회원 정보 요청(private)
+export const useGetMyInfoQuery = () => {
+  const [user, setUser] = useState('');
+  const { isLoading } = useQuery('USER_INFO', getMyInfo, {
+    onSuccess: data => setUser(data.data.data)
+  });
+
+  return { user, isLoading };
+};
+
+// 회원 정보 요청(public)
+export const useGetUserInfoQuery = id => {
+  const [user, setUser] = useState('');
+  const { isLoading } = useQuery('USER_INFO', getUserInfo(id), {
+    onSuccess: data => setUser(data.data.data),
+    onError: e => Promise.reject(e)
+  });
+
+  return {
+    user,
+    isLoading
+  };
 };
