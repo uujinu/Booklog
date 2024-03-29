@@ -1,6 +1,7 @@
 package com.booklog.booklog.domain.user.entity;
 
 import com.booklog.booklog.common.domain.BaseTimeEntity;
+import com.booklog.booklog.domain.book.entity.Book;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,6 +13,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuperBuilder
 @Entity
@@ -46,6 +49,14 @@ public class User extends BaseTimeEntity {
     @Column(length = 200)
     @Builder.Default
     private String introduction = INTRODUCTION_DEFAULT;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Book> books = new ArrayList<>();
+
+    public void addBook(Book book) {
+        this.books.add(book);
+        book.setUser(this);
+    }
 
     public void setName(String name) { this.name = name; }
 
