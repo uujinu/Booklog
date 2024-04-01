@@ -1,9 +1,9 @@
 package com.booklog.booklog.domain.book.controller;
 
 import com.booklog.booklog.common.response.ResponseDto;
-import com.booklog.booklog.domain.book.dto.SearchDetailDto;
+import com.booklog.booklog.domain.book.dto.SearchDetailResDto;
 import com.booklog.booklog.domain.book.dto.SearchDto;
-import com.booklog.booklog.domain.book.service.BookService;
+import com.booklog.booklog.domain.book.service.SearchService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class SearchController {
 
-    private final BookService bookService;
+    private final SearchService searchService;
 
     @GetMapping("/search")
     public ResponseEntity<ResponseDto<SearchDto>> search(@RequestParam("query") String query, @RequestParam("start") String start) {
-        return ResponseEntity.ok(ResponseDto.of(bookService.searchBook(query, start)));
+        return ResponseEntity.ok(ResponseDto.of(searchService.searchBook(query, start)));
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<ResponseDto<SearchDetailResDto>> search(@RequestParam("isbn") String isbn) {
+        return ResponseEntity.ok(ResponseDto.of(searchService.searchBookDetail(isbn)));
     }
 }
