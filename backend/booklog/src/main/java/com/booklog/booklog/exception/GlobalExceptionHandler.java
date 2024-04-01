@@ -10,10 +10,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -66,6 +70,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("handleAuthorizationException throw Exception : ", e);
         final ErrorResponse res = ErrorResponse.of(e.getErrorCode());
         return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        log.error("handleMissingServletRequestParameterException throw Exception : ", ex);
+        HashMap<String, String> error = new HashMap<>();
+        error.put("MissingServletRequestParameterException", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({Exception.class})
