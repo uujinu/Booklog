@@ -3,6 +3,8 @@ package com.booklog.booklog.domain.book.entity;
 import com.booklog.booklog.domain.user.entity.User;
 import io.jsonwebtoken.lang.Assert;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -21,6 +23,7 @@ public class Book {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @NotNull
     @Setter
     private User user;

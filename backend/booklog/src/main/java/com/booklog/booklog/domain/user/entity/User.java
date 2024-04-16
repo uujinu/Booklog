@@ -2,6 +2,8 @@ package com.booklog.booklog.domain.user.entity;
 
 import com.booklog.booklog.common.domain.BaseTimeEntity;
 import com.booklog.booklog.domain.book.entity.Book;
+import com.booklog.booklog.domain.comment.entity.Comment;
+import com.booklog.booklog.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,12 +52,37 @@ public class User extends BaseTimeEntity {
     @Builder.Default
     private String introduction = INTRODUCTION_DEFAULT;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @Builder.Default
     private List<Book> books = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @Builder.Default
+    private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @Builder.Default
+    private List<Comment> comments = new ArrayList<>();
+
     public void addBook(Book book) {
-        this.books.add(book);
+        if (!getBooks().contains(book)) {
+            getBooks().add(book);
+        }
         book.setUser(this);
+    }
+
+    public void addPost(Post post) {
+        if (!getPosts().contains(post)) {
+            getPosts().add(post);
+        }
+        post.setUser(this);
+    }
+
+    public void addComment(Comment comment) {
+        if (!getComments().contains(comment)) {
+            getComments().add(comment);
+        }
+        comment.setUser(this);
     }
 
     public void setName(String name) { this.name = name; }
