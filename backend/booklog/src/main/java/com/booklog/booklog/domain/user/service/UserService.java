@@ -150,7 +150,7 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    // 회원 정보
+    // 회원 정보`
     public UserDto getInfo(String id, boolean isPrivate) {
         User user = findUserById(Long.valueOf(id));
         if (user == null) {
@@ -161,12 +161,7 @@ public class UserService {
     }
 
     private UserDto getUserInfo(User user, boolean isPrivate) {
-        UserDto dto = UserDto.builder()
-                .id(String.valueOf(user.getId()))
-                .name(user.getName())
-                .profileImgUrl(user.getProfileImgUrl())
-                .introduction(user.getIntroduction())
-                .build();
+        UserDto dto = UserDto.of(user);
 
         // 본인 요청일 경우
         if (isPrivate) {
