@@ -39,8 +39,15 @@ public class Post extends BaseTimeEntity {
     @Column(length = 300)
     private String sentence;
 
-    @OneToOne(targetEntity = Post.PostBook.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Post.PostBook postBook;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "title", column = @Column(name = "pb_title")),
+            @AttributeOverride(name = "image", column = @Column(name = "pb_image")),
+            @AttributeOverride(name = "author", column = @Column(name = "pb_author")),
+            @AttributeOverride(name = "publisher", column = @Column(name = "pb_publisher")),
+            @AttributeOverride(name = "isbn", column = @Column(name = "pb_isbn"))
+    })
+    private PostBook postBook = new PostBook();
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Image> images = new ArrayList<>();
@@ -88,21 +95,5 @@ public class Post extends BaseTimeEntity {
         this.postBook = postBook;
         this.content = content;
         this.isPublic = isPublic;
-    }
-
-    @Builder
-    @Entity
-    @Getter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class PostBook {
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-        private String title;
-        private String image;
-        private String author;
-        private String publisher;
-        private String isbn;
     }
 }
