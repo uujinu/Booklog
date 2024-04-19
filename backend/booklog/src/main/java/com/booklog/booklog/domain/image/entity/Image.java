@@ -1,12 +1,11 @@
 package com.booklog.booklog.domain.image.entity;
 
 import com.booklog.booklog.domain.post.entity.Post;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -21,7 +20,6 @@ public class Image {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @Setter
     private Post post;
 
     @NotBlank

@@ -3,15 +3,15 @@ package com.booklog.booklog.infra.email;
 import com.booklog.booklog.common.code.ErrorCode;
 import com.booklog.booklog.common.util.RedisUtil;
 import com.booklog.booklog.exception.EmailException;
+import jakarta.mail.Message;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
-import javax.mail.Message;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import java.security.SecureRandom;
 import java.util.Date;
 import java.util.Random;

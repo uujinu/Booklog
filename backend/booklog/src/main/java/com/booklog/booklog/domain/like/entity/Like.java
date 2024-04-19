@@ -3,19 +3,23 @@ package com.booklog.booklog.domain.like.entity;
 import com.booklog.booklog.common.domain.BaseTimeEntity;
 import com.booklog.booklog.domain.post.entity.Post;
 import com.booklog.booklog.domain.user.entity.User;
+import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.*;
 
-import javax.persistence.*;
 import java.time.LocalTime;
 
-@Table(name = "likes")
+@Table(
+        name = "likes",
+        uniqueConstraints = @UniqueConstraint(columnNames = { "user_id", "post_id" })
+)
 @Entity
 @Getter
 @Setter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE likes SET deleted_at = current_timestamp WHERE like_id = ?")
 public class Like extends BaseTimeEntity {
 
     @Id
@@ -35,7 +39,7 @@ public class Like extends BaseTimeEntity {
 
     private LocalTime deletedAt;
 
-    public void initLike(Like like) {
+    public void initDelete() {
         this.deletedAt = null;
     }
 

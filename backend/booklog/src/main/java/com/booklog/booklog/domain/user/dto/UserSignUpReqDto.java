@@ -1,15 +1,15 @@
 package com.booklog.booklog.domain.user.dto;
 
 import com.booklog.booklog.domain.user.entity.User;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
@@ -33,8 +33,13 @@ public class UserSignUpReqDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
-    // dto -> entity
     public User toEntity(String profileImgUrl) {
-        return User.builder().name(name).password(password).email(email).profileImgUrl(profileImgUrl).birthday(birthday).build();
+        return User.builder()
+                .name(name)
+                .password(password)
+                .email(email)
+                .profileImgUrl(profileImgUrl)
+                .birthday(birthday)
+                .build();
     }
 }

@@ -11,14 +11,13 @@ import com.booklog.booklog.exception.NoSuchDataException;
 import com.booklog.booklog.exception.RestApiException;
 import com.booklog.booklog.infra.email.EmailCodeDto;
 import com.booklog.booklog.infra.email.EmailService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
