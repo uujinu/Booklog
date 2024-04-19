@@ -1,11 +1,10 @@
 package com.booklog.booklog.domain.post.entity;
 
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.Embeddable;
 
 @Embeddable
 @Builder(builderClassName = "postBookBuilder")

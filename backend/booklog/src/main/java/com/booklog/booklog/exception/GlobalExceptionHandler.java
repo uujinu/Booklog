@@ -7,6 +7,7 @@ import com.booklog.booklog.common.response.ResponseEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -17,7 +18,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
-import java.util.Map;
 
 @RestControllerAdvice
 @Slf4j
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
         log.error("MethodArgumentNoValidException: ", ex);
         final ErrorResponse res = ErrorResponse.of(ErrorCode.INVALID_INPUT_VALUE, ex.getBindingResult());
         return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
@@ -80,7 +80,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @Override
-    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         log.error("handleMissingServletRequestParameterException throw Exception : ", ex);
         HashMap<String, String> error = new HashMap<>();
@@ -97,7 +97,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(
-            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatus status, WebRequest request) {
+            Exception ex, @Nullable Object body, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
         log.error("Exception: ", ex);
         final ResponseDto<String> res = ResponseDto.of(ex.getMessage(), ResponseEnum.FAIL);

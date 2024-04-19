@@ -41,7 +41,7 @@ public class S3Uploader {
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata));
-            log.info("[%s] upload completed", fileName);
+            log.info("{} upload completed", fileName);
             return amazonS3Client.getUrl(bucket, fileName).toString();
         } catch (IOException e) {
             throw new S3Exception(ErrorCode.S3_UPLOAD_FAILED);
@@ -54,7 +54,7 @@ public class S3Uploader {
             boolean isObjectExist = amazonS3Client.doesObjectExist(bucket, key);
             if (isObjectExist) {
                 amazonS3Client.deleteObject(deleteObjectRequest);
-                log.info("[%s] delete completed", key);
+                log.info("{} delete completed", key);
             } else {
                 log.info("file not found");
             }

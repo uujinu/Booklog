@@ -4,14 +4,14 @@ import com.booklog.booklog.auth.Auth;
 import com.booklog.booklog.auth.domain.JwtTokenProvider;
 import com.booklog.booklog.common.code.ErrorCode;
 import com.booklog.booklog.exception.AuthorizationException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Component
 @Slf4j
@@ -22,8 +22,8 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        log.info("JWT Interceptor 호출");
-        log.info("[요청 URL] : {}", request.getRequestURI());
+        log.info("JWT Interceptor");
+        log.info("[Request URL] : {}", request.getRequestURI());
 
         if (!(handler instanceof HandlerMethod)) {
             return true;

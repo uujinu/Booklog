@@ -5,14 +5,14 @@ import com.booklog.booklog.domain.comment.entity.Comment;
 import com.booklog.booklog.domain.image.entity.Image;
 import com.booklog.booklog.domain.like.entity.Like;
 import com.booklog.booklog.domain.user.entity.User;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,15 +47,15 @@ public class Post extends BaseTimeEntity {
             @AttributeOverride(name = "publisher", column = @Column(name = "pb_publisher")),
             @AttributeOverride(name = "isbn", column = @Column(name = "pb_isbn"))
     })
-    private PostBook postBook = new PostBook();
+    private PostBook postBook;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Like> likes  = new ArrayList<>();
 
     @Lob
@@ -80,6 +80,13 @@ public class Post extends BaseTimeEntity {
         }
         this.user = user;
         user.getPosts().add(this);
+    }
+
+    public void addImage(Image image) {
+        if (!getImages().contains(image)) {
+            getImages().add(image);
+        }
+        image.setPost(this);
     }
 
     public void addComment(Comment comment) {
