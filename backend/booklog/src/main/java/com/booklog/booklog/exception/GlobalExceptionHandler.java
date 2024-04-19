@@ -72,8 +72,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(res, HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler({S3Exception.class})
+    protected  ResponseEntity<ErrorResponse> handleS3Exception(S3Exception e) {
+        log.error("handleS3Exception throw Exception : ", e);
+        final ErrorResponse res = ErrorResponse.of(e.getErrorCode());
+        return new ResponseEntity<>(res, e.getErrorCode().getHttpStatus());
+    }
+
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+
         log.error("handleMissingServletRequestParameterException throw Exception : ", ex);
         HashMap<String, String> error = new HashMap<>();
         error.put("MissingServletRequestParameterException", ex.getMessage());
