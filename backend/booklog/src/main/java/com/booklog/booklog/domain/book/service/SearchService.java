@@ -71,7 +71,7 @@ public class SearchService {
                 .publisher(item.publisher)
                 .description(item.description)
                 .isbn(item.isbn)
-                .pubDate(item.pubdate)
+                .pubDate(item.pubDate)
                 .totalPage(page)
                 .build();
     }

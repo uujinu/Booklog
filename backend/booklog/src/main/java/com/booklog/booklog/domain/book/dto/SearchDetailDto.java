@@ -19,6 +19,6 @@ public class SearchDetailDto {
         public String isbn;
         public String publisher;
         public String description;
-        public String pubdate;
+        public String pubDate;
     }
 }
